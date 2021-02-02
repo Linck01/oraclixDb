@@ -1,0 +1,23 @@
+{
+  "name": "zorahBackend",
+  "version": "4.0.0",
+  "description": "Zorah Backend",
+  "main": "app.js",
+  "scripts": {
+    "production": "NODE_ENV=production node ./app",
+    "development": "NODE_ENV=development node ./app",
+    "developmentNodemon": "nodemon --legacy-watch"
+  },
+  "dependencies": {
+    "nodemon": "*",
+    "express": "*",
+    "node-cron": "*",
+    "promise-mysql": "*",
+    "ejs": "*",
+    "node-fetch": "*",
+    "@paypal/checkout-server-sdk": "*",
+    "random": "*"
+  },
+  "author": "Linck",
+  "license": "ISC"
+}
