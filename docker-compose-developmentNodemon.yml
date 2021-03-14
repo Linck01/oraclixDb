@@ -1,7 +1,7 @@
 version: '3.3'
 services:
-  zorahmysqldev:
-    container_name: zorahMysqlDev
+  zoraclemysqldev:
+    container_name: zoracleMysqlDev
     image: mysql:5.7
     restart: always
     environment:
@@ -12,8 +12,8 @@ services:
     ports:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
-  zorahbackenddev:
-    container_name: zorahBackendDev
+  zoraclebackenddev:
+    container_name: zoracleDbDev
     restart: always
     build: .
     volumes:

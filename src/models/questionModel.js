@@ -2,24 +2,20 @@ const db = require('./db.js');
 const mysql = require('mysql');
 
 
-exports.new = (guildId,channelId,authorId,category,text,maxanswers) => {
+exports.create = (source,sourceId,fromUserId,text,answerCount) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`INSERT INTO question (discordguildid,discordchannelid,userid,category,text,maxanswers,finished,sent) VALUES ('${guildId}','${channelId}','${authorId}','${category}','${text}','${maxanswers}',0,0)`);
+      const results = await db.query(`INSERT INTO question (source,sourceId,fromUserId,text,answerCount,addDate) VALUES ('${source}','${sourceId}','${fromUserId}','${text}','${answerCount}',${Date.now() / 1000})`);
 
       return resolve(results.insertId);
     } catch (e) { return reject(e); }
   });
 }
 
-try {
-
-} catch (e) { return reject(e); }
-
 exports.get = (id) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`SELECT question.*,user.username,user.discordtag FROM question LEFT JOIN user ON question.userid = user.userid WHERE question.id=${id}`);
+      const results = await db.query(`SELECT * FROM question WHERE question.id=${id}`);
 
       if (results.length == 0)
         return resolve(null);
@@ -42,23 +38,9 @@ exports.set = (id,field,value) => {
 exports.getByUserId = (userId) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`SELECT * FROM question WHERE userid=${userId} ORDER BY dateadded DESC`);
+      const results = await db.query(`SELECT * FROM question WHERE fromUserId = ${userId} ORDER BY addDate DESC`);
 
       return resolve(results);
-    } catch (e) { return reject(e); }
-  });
-}
-
-exports.getActiveQuestionIds = (category,userId) => {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const results = await db.query(`SELECT id FROM question WHERE finished=0 AND category='${category}' AND userid != '${userId}' ORDER BY dateadded ASC`);
-
-      const ids = [];
-      for (result of results)
-        ids.push(result.id);
-
-      return resolve(ids);
     } catch (e) { return reject(e); }
   });
 }
@@ -80,17 +62,32 @@ exports.getAll = (page) => {
       const from = Math.max((page-1) * entriesPerPage + 1);
       const to = page * entriesPerPage;
 
-      const results = await db.query(`SELECT question.*,user.username,user.discordtag FROM question LEFT JOIN user ON question.userid=user.userid ORDER BY dateadded DESC LIMIT ${(from-1)}, ${(to-(from-1))}`);
+      const results = await db.query(`SELECT question.*,user.* FROM question LEFT JOIN user ON question.fromUserId = user.userId ORDER BY addDate DESC LIMIT ${(from-1)}, ${(to-(from-1))}`);
 
       return resolve(results);
     } catch (e) { return reject(e); }
   });
 }
 
-exports.getRandomFinishedQuestionIds = (category,userId) => {
+
+exports.getNotDoneUnfinishedQuestionIds = (userId) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`SELECT id FROM question WHERE finished=1 AND category='${category}' AND userid != '${userId}' ORDER BY rand() LIMIT 500`);
+      const results = await db.query(`SELECT id FROM question WHERE finished=0 AND fromUserId != ${userId} AND id != (SELECT questionId FROM answer WHERE fromUserId = ${userId}) ORDER BY addDate ASC`);
+
+      const ids = [];
+      for (result of results)
+        ids.push(result.id);
+
+      return resolve(ids);
+    } catch (e) { return reject(e); }
+  });
+}
+
+exports.getRandomNotDoneFinishedQuestionId = (userId) => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const results = await db.query(`SELECT id FROM question WHERE finished=1 AND fromUserId != '${userId}' ORDER BY rand() LIMIT 500`);
 
       const ids = [];
       for (result of results)

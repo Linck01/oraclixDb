@@ -70,10 +70,24 @@ exports.getByUserId = (userId) => {
   });
 }
 
+exports.exists = (userId,questionId) => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const results = await db.query(`SELECT * FROM answer WHERE userId=${userId} AND questionId = ${questionId} ORDER BY dateadded DESC`);
+
+      if (results.length == 0)
+        return resolve(false);
+      else
+        return resolve(true);
+    } catch (e) { return reject(e); }
+  });
+}
+
+/*
 exports.getAnsweredQuestionIdsByUserId = (userId) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`SELECT questionid FROM answer WHERE userid='${userId}'`);
+      const results = await db.query(`SELECT questionid FROM answer WHERE userId='${userId}'`);
 
       const ids = [];
       for (result of results)
@@ -82,4 +96,4 @@ exports.getAnsweredQuestionIdsByUserId = (userId) => {
       return resolve(ids);
     } catch (e) { return reject(e); }
   });
-}
+}*/

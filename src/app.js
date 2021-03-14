@@ -9,7 +9,8 @@ const scheduler = require('./cron/scheduler.js');
 const db = require('./models/db.js');
 process.env.PORT = 3008;
 
-// Set Routes
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(routes);
 
 const server = app.listen(process.env.PORT, async () => {

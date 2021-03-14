@@ -1,4 +1,4 @@
-const config = require('../const/config.js');
+const keys = require('../const/keys').get();
 
 exports.apiResponseJson = (results,error) => {
   if (error != null)
@@ -9,7 +9,7 @@ exports.apiResponseJson = (results,error) => {
 }
 
 exports.checkDBApiAuth = (req) => {
-  if (req.headers.authorization != config.DBApiAuth)
+  if (req.headers.authorization != keys.dbApiAuth)
     return false;
     //'DBApi Authorization failed to ' + req.baseUrl + req.originalUrl +'. Auth: ' + req.headers.authorization
 
@@ -29,4 +29,11 @@ exports.waitAndReboot = async (milliseconds) => {
 
 exports.sleep = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+exports.isBanned = (user) => {
+  if (user.banned < Date.now() / 1000)
+    return false;
+  else
+    return true;
 }

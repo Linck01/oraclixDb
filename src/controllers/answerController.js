@@ -9,6 +9,8 @@ exports.new = async (req, res, next) => {
     if (!fct.checkDBApiAuth(req))
       return res.send(fct.apiResponseJson([],'Authorization failed.'));
 
+        //const answer = answerModel.exists(user.id,)
+
     await answerModel.new(req.body.questionId,req.body.userId,req.body.text);
     await userModel.addCredits(req.body.userId,config.creditsPerAnswer);
 

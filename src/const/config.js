@@ -1,4 +1,4 @@
 module.exports = {
-  defaultPrefix: 'ar!',
+  defaultPrefix: '??',
   embedColor: '#4fd6c8'
 };

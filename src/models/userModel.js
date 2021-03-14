@@ -2,44 +2,44 @@ const db = require('./db.js');
 const mysql = require('mysql');
 const config = require('../const/config.js');
 
-exports.addCredits = (id,credits) => {
+exports.set = (userId,field,value) => {
   return new Promise(async function (resolve, reject) {
-    db.query(`UPDATE user SET credits = credits + ${credits} WHERE userid = '${id}'`, function (err, results, fields) {
-      if (err) return reject(err);
+    try {
+      await db.query(`UPDATE user SET ${field} = ${mysql.escape(value)} WHERE id = '${userId}'`);
       return resolve();
-    });
+    } catch (e) { return reject(e); }
+  });
+}
+
+exports.inc = (userId,field,value) => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      await db.query(`UPDATE user SET ${field} = ${field} + ${mysql.escape(value)} WHERE id = '${userId}'`);
+      return resolve();
+    } catch (e) { return reject(e); }
+  });
+}
+
+exports.create = () => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const id = (await db.query(`INSERT INTO user (addDate) VALUES (${Date.now() / 1000})`)).insertId;
+
+      return resolve(await exports.get(id));
+    } catch (e) { return reject(e); }
   });
 }
 
 exports.get = (id) => {
   return new Promise(async function (resolve, reject) {
-    db.query(`SELECT * FROM user WHERE userid = '${id}'`, function (err, results, fields) {
-      if (err) return reject(err);
+    try {
+      const res = await db.query(`SELECT * FROM user WHERE id = '${id}'`);
 
-      if (results.length > 0)
-        return resolve(results[0]);
+      if (res.length == 0)
+          return resolve(null);
+      else
+          return resolve(res[0]);
 
-      db.query(`INSERT INTO user (userid,username,discordtag,credits,banned,lastupvotedbl)
-          VALUES ('${id}','','',${config.startCredits},'1970-01-01 00:00:00','1970-01-01 00:00:00')`,
-        function (err, results, fields) {
-          if (err) return reject(err);
-          db.query(`SELECT * FROM user WHERE userid = '${id}'`, function (err, results, fields) {
-            if (err) return reject(err);
-            if (results.length == 0)
-              return resolve(null);
-             else
-              return resolve(results[0]);
-          });
-      });
-    });
-  });
-}
-
-exports.set = (id,field,value) => {
-  return new Promise(async function (resolve, reject) {
-    db.query(`UPDATE user SET ${field} = ${mysql.escape(value)} WHERE userid = '${id}'`, function (err, results, fields) {
-      if (err) return reject(err);
-      return resolve();
-    });
+    } catch (e) { return reject(e); }
   });
 }
