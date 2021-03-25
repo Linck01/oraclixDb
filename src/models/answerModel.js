@@ -2,24 +2,10 @@ const db = require('./db.js');
 const mysql = require('mysql');
 const answerSentences = require('../const/answerSentences.js');
 
-exports.new = (questionId,userId,text) => {
+exports.create = (questionId,userId,text) => {
   return new Promise(async function (resolve, reject) {
     try {
-      let answerSentenceIndex,answers,possibleSentenceIndices = [];
-      for (let i = 0; i < answerSentences.length;i++)
-        possibleSentenceIndices.push(i);
-
-        answers = await exports.getByQuestionId(questionId);
-        for (answer of answers)
-          possibleSentenceIndices.unset(answer.answersentenceindex);
-
-
-      if (possibleSentenceIndices.lenght == 0)
-        answerSentenceIndex = Math.floor(Math.random() * answerSentences.length);
-      else
-        answerSentenceIndex = possibleSentenceIndices[Math.floor(Math.random() * possibleSentenceIndices.length)];
-
-      await db.query(`INSERT INTO answer (questionid,userid,text,answersentenceindex) VALUES (${questionId},'${userId}',${mysql.escape(text)},${answerSentenceIndex})`);
+      await db.query(`INSERT INTO answer (questionId,fromUserId,text,addDate) VALUES (${questionId},'${userId}',${mysql.escape(text)},${Date.now() / 1000})`);
 
       return resolve();
     } catch (e) { return reject(e); }
@@ -51,7 +37,19 @@ exports.get = (id) => {
 exports.getByQuestionId = (questionId) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`SELECT answer.*,user.username,user.discordtag FROM answer LEFT JOIN user ON answer.userid = user.userid WHERE questionid=${questionId}`);
+      const results = await db.query(`SELECT * FROM answer WHERE questionId = ${questionId}`);
+      for (result of results) {
+        result.answerSentence = answerSentences[result.answersentenceindex].replace('<name>',result.username) + ':';
+      }
+      return resolve(results);
+    } catch (e) { return reject(e); }
+  });
+}
+
+exports.getWithDiscordUsernamesByQuestionId = (questionId) => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const results = await db.query(`SELECT answer.*,user.username,user.tag FROM answer LEFT JOIN discord_user ON answer.fromUserId = discord_user.userId WHERE questionId = ${questionId}`);
       for (result of results) {
         result.answerSentence = answerSentences[result.answersentenceindex].replace('<name>',result.username) + ':';
       }
@@ -63,17 +61,17 @@ exports.getByQuestionId = (questionId) => {
 exports.getByUserId = (userId) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`SELECT * FROM answer WHERE userid=${userId} ORDER BY dateadded DESC`);
+      const results = await db.query(`SELECT * FROM answer WHERE userId=${userId} ORDER BY dateadded DESC`);
 
       return resolve(results);
     } catch (e) { return reject(e); }
   });
 }
 
-exports.exists = (userId,questionId) => {
+exports.existsAnswerFromUser = (userId,questionId) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`SELECT * FROM answer WHERE userId=${userId} AND questionId = ${questionId} ORDER BY dateadded DESC`);
+      const results = await db.query(`SELECT * FROM answer WHERE fromUserId=${userId} AND questionId = ${questionId} ORDER BY addDate DESC`);
 
       if (results.length == 0)
         return resolve(false);
@@ -96,4 +94,20 @@ exports.getAnsweredQuestionIdsByUserId = (userId) => {
       return resolve(ids);
     } catch (e) { return reject(e); }
   });
-}*/
+}
+
+let answerSentenceIndex,answers,possibleSentenceIndices = [];
+for (let i = 0; i < answerSentences.length;i++)
+  possibleSentenceIndices.push(i);
+
+  answers = await exports.getByQuestionId(questionId);
+  for (answer of answers)
+    possibleSentenceIndices.unset(answer.answersentenceindex);
+
+
+if (possibleSentenceIndices.lenght == 0)
+  answerSentenceIndex = Math.floor(Math.random() * answerSentences.length);
+else
+  answerSentenceIndex = possibleSentenceIndices[Math.floor(Math.random() * possibleSentenceIndices.length)];
+
+*/

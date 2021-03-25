@@ -1,8 +1,8 @@
 const questionModel = require('../models/questionModel.js');
-const utilModel = require('../models/utilModel.js');
 const fct = require('../util/fct.js');
 const userModel = require('../models/userModel.js');
 const answerModel = require('../models/answerModel.js');
+const drawHistoryModel = require('../models/drawHistoryModel.js');
 const random = require('random');
 const geometricDist = random.geometric(p = 0.15);
 
@@ -12,7 +12,7 @@ exports.create = async (req, res, next) => {
       return res.send(fct.apiResponseJson([],'Authorization failed.'));
 
     const user = await userModel.get(req.body.userId);
-    const price = (await utilModel.getSettings()).pricePerAnswer * req.body.answerCount;
+    const price = req.body.answerCount;
 
     if (user.credits < price)
       return res.send(fct.apiResponseJson([],'Not enough credits.'));
@@ -20,7 +20,7 @@ exports.create = async (req, res, next) => {
     if (fct.isBanned(user))
       return res.send(fct.apiResponseJson([],'User is still banned.'));
 
-    await userModel.inc(req.body.userId,'credits',-price);
+    await userModel.inc(req.body.userId,'credits',price * -1);
     const insertId = await questionModel.create(req.body.guildId,req.body.channelId,
         req.body.userId,req.body.question,req.body.answerCount);
 
@@ -58,7 +58,6 @@ exports.get = async (req, res, next) => {
 
 exports.getQuestionToAnswer = async (req, res, next) => {
   try {
-    const user = await userModel.get(req.params.userId);
     const question = await drawQuestion(req.params.userId)
 
     res.send(fct.apiResponseJson(question,null));
@@ -104,38 +103,26 @@ exports.getByUserId = async (req, res, next) => {
 function drawQuestion(userId) {
   return new Promise(async function (resolve, reject) {
     try {
-      //const answeredQuestionIds = await answerModel.getAnsweredQuestionIdsByUserId(userId);
-      let i = geometricDist() - 1,question;
+      const questions = await questionModel.getNotDoneNotDrawnUnfinishedQuestions(userId);
+      const drawHistory = await drawHistoryModel.getActive();
 
-      // Unfinished QUESTIONS
-      const notDoneUnfinishedQuestionIds = await questionModel.getNotDoneUnfinishedQuestionIds(userId);
-      //console.log(unfinishedQuestionIds);
-      //const notDoneUnfinishedQuestionIds = unfinishedQuestionIds.diff(answeredQuestionIds);
-
-      if (notDoneUnfinishedQuestionIds.length > 0) {
-        while (i >= notDoneUnfinishedQuestionIds.length)
-          i = geometricDist() - 1;
-
-        question = await questionModel.get(notDoneUnfinishedQuestionIds[i]);
-
-        return resolve(question);
+      let pendingAnswers,finalQuestion;
+      for (let question of questions) {
+        pendingAnswers = drawHistory.filter(h => h.questionId == question.id).length;
+        if (question.currentAnswers + pendingAnswers < question.maxAnswers) {
+          finalQuestion = await questionModel.get(question.id);
+          break;
+        }
       }
 
-      // FINISHED QUESTIONS
-      const finishedQuestionIds = await questionModel.getRandomFinishedQuestionIds(userId);
-      const notDoneFinishedQuestionIds = finishedQuestionIds.diff(answeredQuestionIds);
+      if (!finalQuestion)
+        finalQuestion = await questionModel.getRandomNotDoneNotDrawnFinishedQuestion(userId);
 
-      if (notDoneFinishedQuestionIds.length > 0) {
+      if (finalQuestion)
+        await drawHistoryModel.create(finalQuestion.id,userId);
 
-        while (i >= notDoneFinishedQuestionIds.length)
-          i = geometricDist() - 1;
-
-        question = await questionModel.get(notDoneFinishedQuestionIds[i]);
-
-        return resolve(question);
-      }
-
-      resolve(null);
+      console.log('finalQuestion ',finalQuestion);
+      return resolve(finalQuestion);
     } catch (e) { return reject(e); }
   });
 }

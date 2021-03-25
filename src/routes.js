@@ -32,7 +32,7 @@ router.route('/api/discord_user/create').post(discordUserController.create);
 
 
 // Api - Answer
-router.route('/api/answer/new').post(answerController.new);
+router.route('/api/answer/create').post(answerController.create);
 router.route('/api/answer/getByQuestion/:questionId').get(answerController.getByQuestionId);
 router.route('/api/answer/getByUserId/:userId').get(answerController.getByUserId);
 
