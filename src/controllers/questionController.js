@@ -9,25 +9,29 @@ const geometricDist = random.geometric(p = 0.15);
 exports.create = async (req, res, next) => {
   try {
     if (!fct.checkDBApiAuth(req))
-      return res.send(fct.apiResponseJson([],'Authorization failed.'));
+      return res.send(fct.apiResponseJson([],'authorizationFailed'));
 
     const user = await userModel.get(req.body.userId);
+
+    if (!user)
+      return res.send(fct.apiResponseJson([],'userDoesNotExist'));
+
     const price = req.body.answerCount;
 
-    if (user.credits < price)
-      return res.send(fct.apiResponseJson([],'Not enough credits.'));
-
     if (fct.isBanned(user))
-      return res.send(fct.apiResponseJson([],'User is still banned.'));
+      return res.send(fct.apiResponseJson([],'userBanned'));
+
+    if (user.credits < price)
+      return res.send(fct.apiResponseJson([],'notEnoughCredits'));
 
     await userModel.inc(req.body.userId,'credits',price * -1);
-    const insertId = await questionModel.create(req.body.guildId,req.body.channelId,
+    const insertId = await questionModel.create(req.body.source,req.body.channelId,
         req.body.userId,req.body.question,req.body.answerCount);
 
     res.send(fct.apiResponseJson(insertId,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not add new Question'));
+    res.send(fct.apiResponseJson([],'questionCreateErr'));
   }
 }
 
@@ -41,7 +45,7 @@ exports.set = async (req, res, next) => {
     res.send(fct.apiResponseJson([],null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not update Question.'));
+    res.send(fct.apiResponseJson([],'questionSetErr'));
   }
 }
 
@@ -52,18 +56,23 @@ exports.get = async (req, res, next) => {
     res.send(fct.apiResponseJson(question,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not get Question'));
+    res.send(fct.apiResponseJson([],'questionGetErr'));
   }
 }
 
 exports.getQuestionToAnswer = async (req, res, next) => {
   try {
+    const user = await userModel.get(req.params.userId);
+
+    if (fct.isBanned(user))
+      return res.send(fct.apiResponseJson([],'userBanned'));
+
     const question = await drawQuestion(req.params.userId)
 
     res.send(fct.apiResponseJson(question,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not add new Question'));
+    res.send(fct.apiResponseJson([],'questionGetErr'));
   }
 }
 
@@ -74,7 +83,7 @@ exports.getFinishedButNotSent = async (req, res, next) => {
     res.send(fct.apiResponseJson(questions,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not get Questions'));
+    res.send(fct.apiResponseJson([],'questionGetErr'));
   }
 }
 
@@ -85,7 +94,7 @@ exports.getAll = async (req, res, next) => {
     res.send(fct.apiResponseJson(questions,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not get Questions'));
+    res.send(fct.apiResponseJson([],'questionGetErr'));
   }
 }
 
@@ -96,7 +105,7 @@ exports.getByUserId = async (req, res, next) => {
     res.send(fct.apiResponseJson(questions,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not get Questions'));
+    res.send(fct.apiResponseJson([],'questionGetErr'));
   }
 }
 

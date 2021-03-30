@@ -38,7 +38,7 @@ exports.get = (discord_userId) => {
   return new Promise(async function (resolve, reject) {
     try {
       const res = await db.query(`SELECT * FROM discord_user LEFT JOIN user ON discord_user.userId = user.id WHERE discord_user.id = '${discord_userId}'`);
-
+      
       if (res.length == 0)
           return resolve(null);
       else

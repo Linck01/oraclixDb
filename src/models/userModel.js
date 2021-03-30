@@ -1,6 +1,7 @@
 const db = require('./db.js');
 const mysql = require('mysql');
 const config = require('../const/config.js');
+const discord_userModel = require('./discord/userModel.js');
 
 exports.set = (userId,field,value) => {
   return new Promise(async function (resolve, reject) {
@@ -43,3 +44,22 @@ exports.get = (id) => {
     } catch (e) { return reject(e); }
   });
 }
+
+/*
+exports.getUserFromSource = (source,id) => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      let user;
+      if (source = 'discord')
+        sourceUser = await discord_userModel.get(id);
+      else
+        return reject('Unknown source at getUserFromSource().');
+
+      if (sourceUser)
+        return resolve(await exports.get(sourceUser.userId));
+      else
+        return resolve(null);
+    } catch (e) { reject(e); }
+  });
+}
+*/

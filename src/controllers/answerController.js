@@ -8,16 +8,18 @@ const utilModel = require('../models/utilModel.js');
 exports.create = async (req, res, next) => {
   try {
     if (!fct.checkDBApiAuth(req))
-      return res.send(fct.apiResponseJson([],'Authorization failed.'));
+      return res.send(fct.apiResponseJson([],'AuthorizationFailed'));
 
-        //const answer = answerModel.exists(user.id,)
     const user = await userModel.get(req.body.userId);
+    console.log(user);
+    if (!user)
+      return res.send(fct.apiResponseJson([],'userDoesNotExist'));
 
     if (fct.isBanned(user))
-      return res.send(fct.apiResponseJson([],'User is still banned.'));
+      return res.send(fct.apiResponseJson([],'userBanned'));
 
     if (await answerModel.existsAnswerFromUser(req.body.questionId,req.body.userId))
-      return res.send(fct.apiResponseJson([],'User has already answered that question.'));
+      return res.send(fct.apiResponseJson([],'userAlreadyAnsweredQuestion'));
 
     await answerModel.create(req.body.questionId,req.body.userId,req.body.text);
     await questionModel.inc(req.body.userId,'currentAnswers',1);
@@ -26,10 +28,20 @@ exports.create = async (req, res, next) => {
     res.send(fct.apiResponseJson([],null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not add new Answer'));
+    res.send(fct.apiResponseJson([],'answerCreateError'));
   }
 }
 
+exports.get = async (req, res, next) => {
+  try {
+    const answer = await answerModel.get(req.params.id);
+
+    res.send(fct.apiResponseJson(answer,null));
+  } catch (e) {
+    console.log(e);
+    res.send(fct.apiResponseJson([],'answerAddError'));
+  }
+}
 
 exports.getByQuestionId = async (req, res, next) => {
   try {
@@ -38,7 +50,7 @@ exports.getByQuestionId = async (req, res, next) => {
     res.send(fct.apiResponseJson(answers,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not add new Answer'));
+    res.send(fct.apiResponseJson([],'answerGetError'));
   }
 }
 
@@ -49,7 +61,7 @@ exports.getByUserId = async (req, res, next) => {
     res.send(fct.apiResponseJson(answers,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not add new Answer'));
+    res.send(fct.apiResponseJson([],'answerGetError'));
   }
 }
 

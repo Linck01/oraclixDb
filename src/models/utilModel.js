@@ -15,7 +15,6 @@ exports.getSettings = () => {
   });
 }
 
-
 exports.insertUpdateMulti = (tableName,array) => {
   return new Promise(async function (resolve, reject) {
     try {

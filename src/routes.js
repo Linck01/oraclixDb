@@ -30,14 +30,14 @@ router.route('/api/discord_user/set').put(discordUserController.set);
 router.route('/api/discord_user/inc').put(discordUserController.inc);
 router.route('/api/discord_user/create').post(discordUserController.create);
 
-
 // Api - Answer
+router.route('/api/answer/get/:id').get(answerController.get);
 router.route('/api/answer/create').post(answerController.create);
 router.route('/api/answer/getByQuestion/:questionId').get(answerController.getByQuestionId);
 router.route('/api/answer/getByUserId/:userId').get(answerController.getByUserId);
 
 // Api - Report
-router.route('/api/report/getAll').get(reportController.getAll);
+router.route('/api/report/getTop').get(reportController.getTop);
 router.route('/api/report/create').post(reportController.create);
 router.route('/api/report/delete').delete(reportController.delete);
 
