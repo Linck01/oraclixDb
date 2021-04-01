@@ -1,10 +1,12 @@
 const fct = require('../util/fct.js');
 const reportModel = require('../models/reportModel.js');
-
+const userModel = require('../models/userModel.js');
+const questionModel = require('../models/questionModel.js');
+const answerModel = require('../models/answerModel.js');
 
 exports.create = async (req, res, next) => {
   try {
-    const user = await userModel.get(req.body.userId);
+    const user = await userModel.get(req.body.fromUserId);
 
     if (!user)
       return res.send(fct.apiResponseJson([],'userDoesNotExist'));
@@ -21,10 +23,14 @@ exports.create = async (req, res, next) => {
     if (!obj)
       return res.send(fct.apiResponseJson([],'questionOrAnswerDoesNotExist'));
 
-    if (obj.userId == req.body.userId)
+    if (obj.fromUserId == req.body.fromUserId)
       return res.send(fct.apiResponseJson([],'cantSelfReport'));
 
-    await questionModel
+    const report = await reportModel.get(req.body.type,req.body.typeId,req.body.fromUserId);
+    if (report)
+      return res.send(fct.apiResponseJson([],'reportAlreadyInDB'));
+
+    await reportModel.create(req.body.type,req.body.typeId,req.body.fromUserId,obj.fromUserId)
 
     res.send(fct.apiResponseJson([],null));
   } catch (e) {
@@ -35,7 +41,7 @@ exports.create = async (req, res, next) => {
 
 exports.getTop = async (req, res, next) => {
   try {
-    const reports = await reportModel.getAll();
+    const reports = await reportModel.getTop(req.params.from,req.params.to,req.params.time);
 
     res.send(fct.apiResponseJson(reports,null));
   } catch (e) {

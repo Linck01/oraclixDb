@@ -1,11 +1,11 @@
 const db = require('./db.js');
 const mysql = require('mysql');
 const config = require('../const/config.js');
-const discord_userModel = require('./discord/userModel.js');
 
 exports.set = (userId,field,value) => {
   return new Promise(async function (resolve, reject) {
     try {
+      console.log(userId,field,value);
       await db.query(`UPDATE user SET ${field} = ${mysql.escape(value)} WHERE id = '${userId}'`);
       return resolve();
     } catch (e) { return reject(e); }

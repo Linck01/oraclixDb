@@ -7,6 +7,7 @@ exports.set = (discord_userId,field,value) => {
   return new Promise(async function (resolve, reject) {
     try {
       await db.query(`UPDATE discord_user SET ${field} = ${mysql.escape(value)} WHERE id = '${discord_userId}'`);
+      
       return resolve();
     } catch (e) { return reject(e); }
   });
@@ -37,8 +38,8 @@ exports.create = (discord_userId,username,tag) => {
 exports.get = (discord_userId) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const res = await db.query(`SELECT * FROM discord_user LEFT JOIN user ON discord_user.userId = user.id WHERE discord_user.id = '${discord_userId}'`);
-      
+      const res = await db.query(`SELECT * FROM discord_user WHERE id = ${discord_userId}`);
+
       if (res.length == 0)
           return resolve(null);
       else

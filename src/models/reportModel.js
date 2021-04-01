@@ -2,22 +2,37 @@ const db = require('./db.js');
 const mysql = require('mysql');
 
 
-exports.new = (type,typeId,fromUserId) => {
+exports.get = (type,typeId,fromUserId) => {
   return new Promise(async function (resolve, reject) {
-    db.query(`INSERT IGNORE INTO report (type,typeid,fromuserid) VALUES ('${type}',${typeId},'${fromUserId}')`, function (err, results, fields) {
-      if (err) return reject(err);
-      return resolve();
-    });
+    try {
+      const res = await db.query(`SELECT * FROM report WHERE type='${type}' AND typeId=${typeId} AND fromUserId=${fromUserId}`);
+
+      if (res.length == 0)
+        return resolve(null);
+      else
+        return resolve(res[0]);
+    } catch (e) { return reject(e); }
   });
 }
 
-exports.getAll = () => {
+exports.create = (type,typeId,fromUserId,toUserId) => {
   return new Promise(async function (resolve, reject) {
-    db.query(`SELECT * FROM report`, function (err, results, fields) {
-      if (err) return reject(err);
+    try {
+      const res = await db.query(`INSERT INTO report (type,typeId,fromUserId,toUserId,addDate) VALUES ('${type}',${typeId},${fromUserId},${toUserId},${Date.now() / 1000})`);
 
-      return resolve(results);
-    });
+      return resolve(res.insertId);
+    } catch (e) { return reject(e); }
+  });
+}
+
+exports.getTop = (from,to,time) => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      console.log(from,to,time);
+      const res = await db.query(`SELECT toUserId,count(toUserId) AS count FROM report GROUP BY toUserId ORDER BY count DESC LIMIT ` + (from-1) + `,` + (to-(from-1)));
+
+      return resolve(res);
+    } catch (e) { return reject(e); }
   });
 }
 

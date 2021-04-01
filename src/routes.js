@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const questionController = require('./controllers/questionController');
 const answerController = require('./controllers/answerController');
-const discordGuildController = require('./controllers/discord/guildController');
-const discordUserController = require('./controllers/discord/userController');
+const discord_guildController = require('./controllers/discord/discord_guildController');
+const discord_userController = require('./controllers/discord/discord_userController');
 const reportController = require('./controllers/reportController');
 const viewController = require('./controllers/viewController');
 const webhookController = require('./controllers/webhookController');
 const miscController = require('./controllers/miscController');
+const userController = require('./controllers/userController');
 
 // Views
 router.route('/').get(viewController.index);
@@ -21,14 +22,18 @@ router.route('/api/question/getFinishedButNotSent').get(questionController.getFi
 router.route('/api/question/getAll/:page').get(questionController.getAll);
 router.route('/api/question/getByUserId/:userId').get(questionController.getByUserId);
 
-// Api - DiscordGuild
-router.route('/api/discord_guild/get/:id').get(discordGuildController.get);
-router.route('/api/discord_guild/set').put(discordGuildController.set);
-router.route('/api/discord_guild/create').post(discordGuildController.create);
-router.route('/api/discord_user/get/:id').get(discordUserController.get);
-router.route('/api/discord_user/set').put(discordUserController.set);
-router.route('/api/discord_user/inc').put(discordUserController.inc);
-router.route('/api/discord_user/create').post(discordUserController.create);
+// Api - Discord User & Discord Guild
+router.route('/api/discord_guild/get/:id').get(discord_guildController.get);
+router.route('/api/discord_guild/set').put(discord_guildController.set);
+router.route('/api/discord_guild/create').post(discord_guildController.create);
+router.route('/api/discord_user/get/:id').get(discord_userController.get);
+router.route('/api/discord_user/set').put(discord_userController.set);
+router.route('/api/discord_user/inc').put(discord_userController.inc);
+router.route('/api/discord_user/create').post(discord_userController.create);
+
+// Api - User
+router.route('/api/user/get/:id').get(userController.get);
+router.route('/api/user/set').put(userController.set);
 
 // Api - Answer
 router.route('/api/answer/get/:id').get(answerController.get);
@@ -37,7 +42,7 @@ router.route('/api/answer/getByQuestion/:questionId').get(answerController.getBy
 router.route('/api/answer/getByUserId/:userId').get(answerController.getByUserId);
 
 // Api - Report
-router.route('/api/report/getTop').get(reportController.getTop);
+router.route('/api/report/getTop/:from/:to/:time').get(reportController.getTop);
 router.route('/api/report/create').post(reportController.create);
 router.route('/api/report/delete').delete(reportController.delete);
 

@@ -1,4 +1,4 @@
-const guildModel = require('../../models/discord/guildModel.js');
+const discord_guildModel = require('../../models/discord/discord_guildModel.js');
 const fct = require('../../util/fct.js');
 
 exports.get = async (req, res, next) => {
@@ -6,7 +6,7 @@ exports.get = async (req, res, next) => {
     if (!fct.checkDBApiAuth(req))
       return res.send(fct.apiResponseJson([],'Authorization failed.'));
 
-    const guild = await guildModel.get(req.params.id);
+    const guild = await discord_guildModel.get(req.params.id);
 
     res.send(fct.apiResponseJson(guild,null));
   } catch (e) {
@@ -21,7 +21,7 @@ exports.set = async (req, res, next) => {
       if (!fct.checkDBApiAuth(req))
         return res.send(fct.apiResponseJson([],'Authorization failed.'));
 
-      await guildModel.set(req.body.guildId,req.body.field,req.body.value);
+      await discord_guildModel.set(req.body.guildId,req.body.field,req.body.value);
 
       res.send(fct.apiResponseJson([],null));
     } catch (e) {
@@ -36,7 +36,7 @@ exports.create = async (req, res, next) => {
     if (!fct.checkDBApiAuth(req))
       return res.send(fct.apiResponseJson([],'Authorization failed.'));
 
-    const guild = await guildModel.create(req.body.guildId);
+    const guild = await discord_guildModel.create(req.body.guildId);
 
     res.send(fct.apiResponseJson(guild,null));
   } catch (e) {
