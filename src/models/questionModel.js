@@ -55,10 +55,10 @@ exports.getByUserId = (userId) => {
   });
 }
 
-exports.getFinishedButNotSent = () => {
+exports.getFinishedButNotSent = (source) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const results = await db.query(`SELECT * FROM question WHERE currentAnswers >= maxAnswers AND sent=0`);
+      const results = await db.query(`SELECT * FROM question WHERE currentAnswers >= maxAnswers AND sent=0 AND source='${source}'`);
 
       return resolve(results);
     } catch (e) { return reject(e); }

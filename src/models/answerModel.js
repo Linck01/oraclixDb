@@ -1,6 +1,5 @@
 const db = require('./db.js');
 const mysql = require('mysql');
-const answerSentences = require('../const/answerSentences.js');
 
 exports.create = (questionId,userId,text) => {
   return new Promise(async function (resolve, reject) {
@@ -38,9 +37,7 @@ exports.getByQuestionId = (questionId) => {
   return new Promise(async function (resolve, reject) {
     try {
       const results = await db.query(`SELECT * FROM answer WHERE questionId = ${questionId}`);
-      for (result of results) {
-        result.answerSentence = answerSentences[result.answersentenceindex].replace('<name>',result.username) + ':';
-      }
+
       return resolve(results);
     } catch (e) { return reject(e); }
   });
@@ -80,6 +77,20 @@ exports.existsAnswerFromUser = (userId,questionId) => {
     } catch (e) { return reject(e); }
   });
 }
+
+exports.getAnswersFromMultipleQuestions = (questionIds) => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      if (!questionIds || questionIds.length == 0)
+        return resolve(null);
+
+      const results = await db.query(`SELECT * FROM answer WHERE questionId IN (${questionIds.join(',')})`);
+
+      return resolve(results);
+    } catch (e) { return reject(e); }
+  });
+}
+
 
 /*
 exports.getAnsweredQuestionIdsByUserId = (userId) => {

@@ -78,7 +78,11 @@ exports.getQuestionToAnswer = async (req, res, next) => {
 
 exports.getFinishedButNotSent = async (req, res, next) => {
   try {
-    const questions = await questionModel.getFinishedButNotSent();
+    const questions = await questionModel.getFinishedButNotSent(req.params.source);
+    const answers = await answerModel.getAnswersFromMultipleQuestions(questions.map(q => q.id));
+
+    for (let question of questions)
+      question.answers = answers.filter(a => a.questionId == question.id);
 
     res.send(fct.apiResponseJson(questions,null));
   } catch (e) {

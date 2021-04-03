@@ -11,7 +11,7 @@ exports.create = async (req, res, next) => {
       return res.send(fct.apiResponseJson([],'AuthorizationFailed'));
 
     const user = await userModel.get(req.body.userId);
-    console.log(user);
+
     if (!user)
       return res.send(fct.apiResponseJson([],'userDoesNotExist'));
 
@@ -22,7 +22,7 @@ exports.create = async (req, res, next) => {
       return res.send(fct.apiResponseJson([],'userAlreadyAnsweredQuestion'));
 
     await answerModel.create(req.body.questionId,req.body.userId,req.body.text);
-    await questionModel.inc(req.body.userId,'currentAnswers',1);
+    await questionModel.inc(req.body.questionId,'currentAnswers',1);
     await userModel.inc(req.body.userId,'credits',(await utilModel.getSettings()).rewardPerAnswer);
 
     res.send(fct.apiResponseJson([],null));

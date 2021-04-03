@@ -1,7 +1,7 @@
 module.exports = [
   {
-    title: 'Privacy Policy for Activityrank website and bot',
-    content: 'At ActivityRank, accessible from activityrank.me, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by ActivityRank and how we use it. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us. This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in ActivityRank. This policy is not applicable to any information collected offline or via channels other than this website and bot. Our Privacy Policy was created with the help of the Privacy Policy Generator and the Generate Privacy Policy Generator.',
+    title: 'Privacy Policy for Oraclix website and bot',
+    content: 'At Oraclix, accessible from Oraclix.me, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Oraclix and how we use it. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us. This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in Oraclix. This policy is not applicable to any information collected offline or via channels other than this website and bot. Our Privacy Policy was created with the help of the Privacy Policy Generator and the Generate Privacy Policy Generator.',
   },
   {
     title: 'Consent',
@@ -17,11 +17,11 @@ module.exports = [
   },
   {
     title: 'Log Files',
-    content: 'ActivityRank follows a standard procedure of using log files. These files log visitors when they visit website and bot. All hosting companies do this and a part of hosting services\' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users\' movement on website and bot, and gathering demographic information.',
+    content: 'Oraclix follows a standard procedure of using log files. These files log visitors when they visit website and bot. All hosting companies do this and a part of hosting services\' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users\' movement on website and bot, and gathering demographic information.',
   },
   {
     title: 'Cookies and Web Beacons',
-    content: 'Like any other website, ActivityRank uses cookies. These cookies are used to store information including visitors\' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users\' experience by customizing our web page content based on visitors\' browser type and/or other information.',
+    content: 'Like any other website, Oraclix uses cookies. These cookies are used to store information including visitors\' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users\' experience by customizing our web page content based on visitors\' browser type and/or other information.',
   },
   {
     title: 'Google DoubleClick DART Cookie',
@@ -33,11 +33,11 @@ module.exports = [
   },
   {
     title: 'Advertising Partners Privacy Policies',
-    content: 'You may consult this list to find the Privacy Policy for each of the advertising partners of ActivityRank. Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on ActivityRank, which are sent directly to users\' browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit. Note that ActivityRank has no access to or control over these cookies that are used by third-party advertisers.',
+    content: 'You may consult this list to find the Privacy Policy for each of the advertising partners of Oraclix. Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Oraclix, which are sent directly to users\' browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit. Note that Oraclix has no access to or control over these cookies that are used by third-party advertisers.',
   },
   {
     title: 'Third Party Privacy Policies',
-    content: 'ActivityRank\'s Privacy Policy does not apply to other advertisers or websites and bots. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options. You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers\' respective websites.',
+    content: 'Oraclix\'s Privacy Policy does not apply to other advertisers or websites and bots. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options. You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers\' respective websites.',
   },
   {
     title: 'CCPA Privacy Rights (Do Not Sell My Personal Information)',
@@ -49,6 +49,6 @@ module.exports = [
   },
   {
     title: 'Children\'s Information',
-    content: 'Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity. ActivityRank does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website and bot, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.',
+    content: 'Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity. Oraclix does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website and bot, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.',
   },
 ];
