@@ -21,6 +21,16 @@ exports.set = (id,field,value) => {
   });
 }
 
+exports.inc = (id,field,value) => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      await db.query(`UPDATE answer SET ${field} = ${field} + ${mysql.escape(value)} WHERE id=${id}`);
+
+      return resolve();
+    } catch (e) { return reject(e); }
+  });
+}
+
 exports.get = (id) => {
   return new Promise(async function (resolve, reject) {
     try {

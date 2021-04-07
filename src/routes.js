@@ -30,7 +30,7 @@ router.route('/api/discord_guild/set').put(discord_guildController.set);
 // Api - User
 router.route('/api/user/get/:id').get(userController.get);
 router.route('/api/user/getBySourceId/:source/:sourceId').get(userController.getBySourceId);
-router.route('/api/user/set').put(userController.set);
+router.route('/api/user/tip').put(userController.tip);
 router.route('/api/user/create').post(userController.create);
 
 // Api - Answer
