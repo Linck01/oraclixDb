@@ -1,13 +1,13 @@
 module.exports = [
   {
     tag: 'ask',
-    title: 'Spend favor to get a fast response to any question',
-    desc: '',
+    title: 'Ask any question',
+    desc: 'Just ask and get a fast response to any question from the Oracle.',
   },
   {
     tag: 'answer',
-    title: 'Gain favor by answering questions',
-    desc: '',
+    title: 'Answer a question',
+    desc: 'Gain favor by answering questions.',
   },
   {
     tag: 'report',

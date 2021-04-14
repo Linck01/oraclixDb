@@ -65,14 +65,10 @@ exports.getFinishedButNotSent = (source) => {
   });
 }
 
-exports.getAll = (page) => {
+exports.getLatest = (from,to) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const entriesPerPage = 10;
-      const from = Math.max((page-1) * entriesPerPage + 1);
-      const to = page * entriesPerPage;
-
-      const results = await db.query(`SELECT question.*,user.* FROM question LEFT JOIN user ON question.fromUserId = user.userId ORDER BY addDate DESC LIMIT ${(from-1)}, ${(to-(from-1))}`);
+      const results = await db.query(`SELECT * FROM question ORDER BY addDate DESC LIMIT ${(from-1)}, ${(to-(from-1))}`);
 
       return resolve(results);
     } catch (e) { return reject(e); }

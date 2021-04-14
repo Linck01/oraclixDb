@@ -14,6 +14,15 @@ exports.create = async (req, res, next) => {
     if (fct.isBanned(user))
       return res.send(fct.apiResponseJson([],'userBanned'));
 
+    let reason;
+    if (req.body.reason == 'atos')
+      reason = 0;
+    else if (req.body.reason == 'unrelated')
+      reason = 1;
+    else
+      return res.send(fct.apiResponseJson([],'invalidReportReason'));
+
+
     let obj;
     if (req.body.type == 'question')
       obj = await questionModel.get(req.body.typeId);
@@ -30,7 +39,7 @@ exports.create = async (req, res, next) => {
     if (report)
       return res.send(fct.apiResponseJson([],'reportAlreadyInDB'));
 
-    await reportModel.create(req.body.type,req.body.typeId,req.body.fromUserId,obj.fromUserId)
+    await reportModel.create(req.body.type,req.body.typeId,req.body.fromUserId,obj.fromUserId,reason)
 
     res.send(fct.apiResponseJson([],null));
   } catch (e) {

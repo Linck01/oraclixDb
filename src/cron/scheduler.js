@@ -5,19 +5,17 @@ let aAAInterval,aAAACronInterval,restartDelay;
 
 if (process.env.NODE_ENV == 'production') {
   restartDelay = 86400000 * 7;
-  aAAInterval = 10000;
-  aAAACronInterval = '30 * * * * *';
+  priceChangeInterval = 10000;
 } else {
   restartDelay = 86400000 * 7;
-  aAAInterval = 10000;
-  aAAACronInterval = '*/10 * * * * *';
+  priceChangeInterval = 10000;
 }
 
 exports.start = () => {
   return new Promise(async function (resolve, reject) {
     try {
       //startStatFlush(manager);
-      startAAA();
+      startPriceChange();
 
       // Periodical Restart
       setTimeout(function() {
@@ -26,23 +24,18 @@ exports.start = () => {
         } catch (e) { console.log(e); }
       }, restartDelay);
 
-      cron.schedule(aAAACronInterval, async function() {
-        try {
-
-        } catch (e) { console.log(e); }
-      });
-
       resolve();
     } catch (e) { reject(e); }
   });
 }
 
-const startAAA = async (manager) => {
+const startPriceChange = async (manager) => {
   while(true) {
     try {
+      
 
     } catch (e) { console.log(e); }
 
-    await fct.sleep(aAAInterval).catch(e => console.log(e));
+    await fct.sleep(priceChangeInterval).catch(e => console.log(e));
   }
 }

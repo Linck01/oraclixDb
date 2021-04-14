@@ -5,6 +5,8 @@ const answerModel = require('../models/answerModel.js');
 const drawHistoryModel = require('../models/drawHistoryModel.js');
 const random = require('random');
 const geometricDist = random.geometric(p = 0.15);
+const utilModel = require('../models/utilModel.js');
+const slugify = require('slugify');
 
 exports.create = async (req, res, next) => {
   try {
@@ -16,11 +18,10 @@ exports.create = async (req, res, next) => {
     if (!user)
       return res.send(fct.apiResponseJson([],'userDoesNotExist'));
 
-    const price = req.body.answerCount;
-
     if (fct.isBanned(user))
       return res.send(fct.apiResponseJson([],'userBanned'));
 
+    const price = req.body.answerCount * (await utilModel.getSettings()).costPerAnswer;
     if (user.credits < price)
       return res.send(fct.apiResponseJson([],'notEnoughCredits'));
 
@@ -53,6 +54,9 @@ exports.get = async (req, res, next) => {
   try {
     question = await questionModel.get(req.params.id);
 
+    if (question)
+      question.url = slugify(question.text);
+    
     res.send(fct.apiResponseJson(question,null));
   } catch (e) {
     console.log(e);
@@ -91,9 +95,9 @@ exports.getFinishedButNotSent = async (req, res, next) => {
   }
 }
 
-exports.getAll = async (req, res, next) => {
+exports.getLatest = async (req, res, next) => {
   try {
-    const questions = await questionModel.getAll(req.params.page);
+    const questions = await questionModel.getLatest(req.params.from,req.params.to);
 
     res.send(fct.apiResponseJson(questions,null));
   } catch (e) {

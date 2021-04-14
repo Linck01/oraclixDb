@@ -3,7 +3,6 @@ const answerModel = require('../models/answerModel.js');
 const questionModel = require('../models/questionModel.js');
 const userModel = require('../models/userModel.js');
 const config = require('../const/config.js');
-const utilModel = require('../models/utilModel.js');
 
 exports.create = async (req, res, next) => {
   try {
@@ -23,7 +22,7 @@ exports.create = async (req, res, next) => {
 
     await answerModel.create(req.body.questionId,req.body.userId,req.body.text);
     await questionModel.inc(req.body.questionId,'currentAnswers',1);
-    await userModel.inc(req.body.userId,'credits',(await utilModel.getSettings()).rewardPerAnswer);
+    await userModel.inc(req.body.userId,'credits',1);
 
     res.send(fct.apiResponseJson([],null));
   } catch (e) {

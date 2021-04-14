@@ -1,7 +1,7 @@
 version: '3.3'
 services:
-  zoraclemysql:
-    container_name: zoracleMysql
+  oraclixmysql:
+    container_name: oraclixMysql
     image: mysql:5.7
     restart: always
     environment:
@@ -12,8 +12,8 @@ services:
     ports:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
-  zoraclebackend:
-    container_name: zoracleDb
+  oraclixbackend:
+    container_name: oraclixDb
     restart: always
     build: .
     volumes:

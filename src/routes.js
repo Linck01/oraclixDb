@@ -19,7 +19,7 @@ router.route('/api/question/get/:id').get(questionController.get);
 router.route('/api/question/getQuestionToAnswer/:userId').get(questionController.getQuestionToAnswer);
 router.route('/api/question/set').put(questionController.set);
 router.route('/api/question/getFinishedButNotSent/:source').get(questionController.getFinishedButNotSent);
-router.route('/api/question/getAll/:page').get(questionController.getAll);
+router.route('/api/question/getLatest/:from/:to').get(questionController.getLatest);
 router.route('/api/question/getByUserId/:userId').get(questionController.getByUserId);
 
 // Api - Discord

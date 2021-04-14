@@ -15,10 +15,10 @@ exports.get = (type,typeId,fromUserId) => {
   });
 }
 
-exports.create = (type,typeId,fromUserId,toUserId) => {
+exports.create = (type,typeId,fromUserId,toUserId,reason) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const res = await db.query(`INSERT INTO report (type,typeId,fromUserId,toUserId,addDate) VALUES ('${type}',${typeId},${fromUserId},${toUserId},${Date.now() / 1000})`);
+      const res = await db.query(`INSERT INTO report (type,typeId,fromUserId,toUserId,reason,addDate) VALUES ('${type}',${typeId},${fromUserId},${toUserId},${reason},${Date.now() / 1000})`);
 
       return resolve(res.insertId);
     } catch (e) { return reject(e); }

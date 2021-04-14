@@ -1,7 +1,7 @@
 {
-  "name": "zorahBackend",
+  "name": "oraclixBackend",
   "version": "4.0.0",
-  "description": "Zorah Backend",
+  "description": "Oraclix Backend",
   "main": "app.js",
   "scripts": {
     "production": "NODE_ENV=production node ./app",
@@ -16,7 +16,8 @@
     "ejs": "*",
     "node-fetch": "*",
     "@paypal/checkout-server-sdk": "*",
-    "random": "*"
+    "random": "*",
+    "slugify": "*"
   },
   "author": "Linck",
   "license": "ISC"
