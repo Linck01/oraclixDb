@@ -25,7 +25,7 @@ router.route('/api/question/getByUserId/:userId').get(questionController.getByUs
 // Api - Discord
 router.route('/api/discord_guild/get/:id').get(discord_guildController.get);
 router.route('/api/discord_guild/set').put(discord_guildController.set);
-
+router.route('/api/discord_guild/create').post(discord_guildController.create);
 
 // Api - User
 router.route('/api/user/get/:id').get(userController.get);

@@ -21,7 +21,7 @@ exports.getTexts = async (req, res, next) => {
     },null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not get guildchannel by guildId.'));
+    res.send(fct.apiResponseJson([],'Could not getTexts.'));
   }
 }
 
@@ -32,6 +32,6 @@ exports.getSettings = async (req, res, next) => {
     res.send(fct.apiResponseJson(settings,null));
   } catch (e) {
     console.log(e);
-    res.send(fct.apiResponseJson([],'Could not get guildchannel by guildId.'));
+    res.send(fct.apiResponseJson([],'Could not getSettings.'));
   }
 }
