@@ -22,7 +22,7 @@ exports.create = async (req, res, next) => {
 
     await answerModel.create(req.body.questionId,req.body.userId,req.body.text);
     await questionModel.inc(req.body.questionId,'currentAnswers',1);
-    await userModel.inc(req.body.userId,'credits',1);
+    await userModel.inc(req.body.userId,'credits',10);
 
     res.send(fct.apiResponseJson([],null));
   } catch (e) {

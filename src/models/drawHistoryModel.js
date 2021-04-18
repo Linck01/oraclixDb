@@ -5,7 +5,7 @@ const config = require('../const/config.js');
 exports.getActive = () => {
   return new Promise(async function (resolve, reject) {
     try {
-      const res = await db.query(`SELECT * from drawHistory WHERE addDate > ${Date.now() / 1000} - ${config.userAnswerTime}`);
+      const res = await db.query(`SELECT * from drawHistory WHERE addDate > ${Date.now() / 1000} - ${config.answerTimeFrameS}`);
 
       /*let obj = {};
       for (row of res) {

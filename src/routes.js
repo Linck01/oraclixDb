@@ -7,7 +7,7 @@ const discord_shardController = require('./controllers/discord/discord_shardCont
 const reportController = require('./controllers/reportController');
 const viewController = require('./controllers/viewController');
 const webhookController = require('./controllers/webhookController');
-const miscController = require('./controllers/miscController');
+const utilController = require('./controllers/utilController');
 const userController = require('./controllers/userController');
 
 // Views
@@ -47,9 +47,11 @@ router.route('/api/report/delete').delete(reportController.delete);
 // Webhooks
 router.route('/webhook/dbl/upvote').post(webhookController.dblUpvote);
 
+
 // MISC
-router.route('/api/misc/texts/').get(miscController.getTexts);
-router.route('/api/misc/settings/').get(miscController.getSettings);
+router.route('/api/util/texts/').get(utilController.getTexts);
+router.route('/api/util/settings/').get(utilController.getSettings);
+router.route('/api/util/insertUpdateMulti/').put(utilController.insertUpdateMulti);
 
 
 module.exports = router;

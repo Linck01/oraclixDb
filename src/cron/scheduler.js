@@ -1,21 +1,23 @@
 const cron = require('node-cron');
 const fct = require('../util/fct.js');
+const updatePrice = require('../util/updatePrice.js');
 
-let aAAInterval,aAAACronInterval,restartDelay;
+
+let updatePriceInterval,restartDelay;
 
 if (process.env.NODE_ENV == 'production') {
   restartDelay = 86400000 * 7;
-  priceChangeInterval = 10000;
+  updatePriceInterval = 10000;
 } else {
   restartDelay = 86400000 * 7;
-  priceChangeInterval = 10000;
+  updatePriceInterval = 10000;
 }
 
 exports.start = () => {
   return new Promise(async function (resolve, reject) {
     try {
       //startStatFlush(manager);
-      startPriceChange();
+      startUpdatePrice();
 
       // Periodical Restart
       setTimeout(function() {
@@ -29,13 +31,12 @@ exports.start = () => {
   });
 }
 
-const startPriceChange = async (manager) => {
+const startUpdatePrice = async (manager) => {
   while(true) {
     try {
-      
-
+      await updatePrice();
     } catch (e) { console.log(e); }
 
-    await fct.sleep(priceChangeInterval).catch(e => console.log(e));
+    await fct.sleep(updatePriceInterval).catch(e => console.log(e));
   }
 }

@@ -1,5 +1,5 @@
 module.exports = {
   defaultPrefix: '??',
-  userAnswerTime: 300,
+  answerTimeFrameS: 180,
   userAnswerCooldownTime: 600
 };

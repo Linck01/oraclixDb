@@ -1,20 +1,6 @@
 const db = require('./db.js');
 const mysql = require('promise-mysql');
 
-exports.getSettings = () => {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const res = await db.query('SELECT * from setting');
-      let settings = {};
-
-      for (setting of res)
-        settings[setting.id] = setting.value;
-
-      resolve(settings);
-    } catch (e) { reject(e); }
-  });
-}
-
 exports.insertUpdateMulti = (tableName,array) => {
   return new Promise(async function (resolve, reject) {
     try {
@@ -36,7 +22,7 @@ exports.insertUpdateMulti = (tableName,array) => {
         valueSqls.push('(' + values.join(',') + ')');
       }
 
-      await managerDb.query(`INSERT INTO botShardStat (${keys.join(',')})
+      await db.query(`INSERT INTO discord_shard (${keys.join(',')})
           VALUES ${valueSqls.join(',')} ON DUPLICATE KEY UPDATE ${updateSqls.join(',')}`);
 
       return resolve();

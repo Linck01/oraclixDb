@@ -5,7 +5,7 @@ const answerModel = require('../models/answerModel.js');
 const drawHistoryModel = require('../models/drawHistoryModel.js');
 const random = require('random');
 const geometricDist = random.geometric(p = 0.15);
-const utilModel = require('../models/utilModel.js');
+const settingModel = require('../models/settingModel.js');
 const slugify = require('slugify');
 
 exports.create = async (req, res, next) => {
@@ -21,7 +21,7 @@ exports.create = async (req, res, next) => {
     if (fct.isBanned(user))
       return res.send(fct.apiResponseJson([],'userBanned'));
 
-    const price = req.body.answerCount * (await utilModel.getSettings()).costPerAnswer;
+    const price = req.body.answerCount * (await settingModel.getAll()).costPerAnswer;
     if (user.credits < price)
       return res.send(fct.apiResponseJson([],'notEnoughCredits'));
 
@@ -56,7 +56,7 @@ exports.get = async (req, res, next) => {
 
     if (question)
       question.url = slugify(question.text);
-    
+
     res.send(fct.apiResponseJson(question,null));
   } catch (e) {
     console.log(e);

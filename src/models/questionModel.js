@@ -75,6 +75,19 @@ exports.getLatest = (from,to) => {
   });
 }
 
+exports.getOldestUnfinishedQuestion = () => {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const results = await db.query(`SELECT * FROM question WHERE currentAnswers < maxAnswers ORDER BY addDate ASC LIMIT 1`);
+
+      if (results.length == 0)
+        return resolve(null);
+      else
+        return resolve(results[0]);
+
+    } catch (e) { return reject(e); }
+  });
+}
 
 exports.getNotDoneNotDrawnUnfinishedQuestions = (userId) => {
   return new Promise(async function (resolve, reject) {
