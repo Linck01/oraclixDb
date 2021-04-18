@@ -7,10 +7,10 @@ let updatePriceInterval,restartDelay;
 
 if (process.env.NODE_ENV == 'production') {
   restartDelay = 86400000 * 7;
-  updatePriceInterval = 10000;
+  updatePriceInterval = 300 * 1000;
 } else {
   restartDelay = 86400000 * 7;
-  updatePriceInterval = 10000;
+  updatePriceInterval = 15 * 1000;
 }
 
 exports.start = () => {
