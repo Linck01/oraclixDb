@@ -60,7 +60,7 @@ exports.tip = async (req, res, next) => {
       if (!user)
         return res.send(fct.apiResponseJson([],'userDoesNotExist'));
 
-      if (req.body.amount <= 1 || req.body.amount > 50)
+      if (req.body.amount < 1 || req.body.amount > 50)
         return res.send(fct.apiResponseJson([],'tipAmountWrong'));
 
       if (user.credits < req.body.amount)
