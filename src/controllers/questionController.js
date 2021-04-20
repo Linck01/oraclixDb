@@ -26,10 +26,10 @@ exports.create = async (req, res, next) => {
       return res.send(fct.apiResponseJson([],'notEnoughCredits'));
 
     await userModel.inc(req.body.userId,'credits',price * -1);
-    const insertId = await questionModel.create(req.body.source,req.body.channelId,
+    const question = await questionModel.create(req.body.source,req.body.channelId,
         req.body.userId,req.body.question,req.body.answerCount);
 
-    res.send(fct.apiResponseJson(insertId,null));
+    res.send(fct.apiResponseJson(question,null));
   } catch (e) {
     console.log(e);
     res.send(fct.apiResponseJson([],'questionCreateErr'));
