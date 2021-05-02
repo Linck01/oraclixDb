@@ -19,12 +19,12 @@ module.exports = (client) => {
 
         if ((Date.now() / 1000) - question.addDate  > 3600 && settings.costPerAnswer < 11) {
           await settingModel.inc('costPerAnswer',1);
-          console.log(nowString + 'Increased to ' + (settings.costPerAnswer*1+1));
+          console.log(nowString + ' Increased to ' + (settings.costPerAnswer*1+1));
         } else if ((Date.now() / 1000) - question.addDate  < 600 && settings.costPerAnswer > 10) {
           await settingModel.inc('costPerAnswer',-1);
-          console.log(nowString + 'Decreased to ' + (settings.costPerAnswer*1-1));
+          console.log(nowString + ' Decreased to ' + (settings.costPerAnswer*1-1));
         } else
-          console.log(nowString + 'No change (' + settings.costPerAnswer + ').');
+          console.log(nowString + ' No change (' + settings.costPerAnswer + ').');
 
         resolve();
       } catch (e) { reject(e); }

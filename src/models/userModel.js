@@ -23,7 +23,7 @@ exports.inc = (id,field,value) => {
 exports.create = (source,sourceId,username) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const id = (await db.query(`INSERT INTO user (source,sourceId,username,addDate) VALUES (${source},'${sourceId}','${username}',${Date.now() / 1000})`)).insertId;
+      const id = (await db.query(`INSERT INTO user (source,sourceId,username,addDate) VALUES (${source},'${sourceId}','${mysql.escape(username)}',${Date.now() / 1000})`)).insertId;
 
       return resolve(await exports.get(id));
     } catch (e) { return reject(e); }
