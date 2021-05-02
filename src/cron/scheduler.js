@@ -1,6 +1,6 @@
 const cron = require('node-cron');
 const fct = require('../util/fct.js');
-const updatePrice = require('../util/updatePrice.js');
+const updatePrice = require('./updatePrice.js');
 
 
 let updatePriceInterval,restartDelay;
