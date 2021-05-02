@@ -5,7 +5,7 @@ const mysql = require('mysql');
 exports.create = (source,sourceId,fromUserId,text,maxAnswers) => {
   return new Promise(async function (resolve, reject) {
     try {
-      const res = await db.query(`INSERT INTO question (source,sourceId,fromUserId,text,maxAnswers,addDate) VALUES ('${source}','${sourceId}','${fromUserId}','${text}','${maxAnswers}',${Date.now() / 1000})`);
+      const res = await db.query(`INSERT INTO question (source,sourceId,fromUserId,text,maxAnswers,addDate) VALUES ('${source}','${sourceId}','${fromUserId}',${mysql.escape(text)},${mysql.escape(maxAnswers)},${Date.now() / 1000})`);
 
       return resolve(await exports.get(res.insertId));
     } catch (e) { return reject(e); }
